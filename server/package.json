@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fluent-ffmpeg": "^2.1.2",
+    "get-video-duration": "^4.1.0",
+    "mp3-duration": "^1.1.0",
+    "puppeteer": "^19.2.0",
+    "puppeteer-screen-recorder": "^2.1.2",
+    "puppeteer-stream": "^2.1.1"
+  }
+}

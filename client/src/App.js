@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import PodCastEditor from './pages/podcastEditor';
+import TestText from './pages/podcastEditor/mainCanvas/components/Subtitle/TestText';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       }}
     >
       <PodCastEditor />
+      {/* <TestText /> */}
     </div>
   );
 }

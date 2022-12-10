@@ -1,9 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Element from './components/Element';
 import MovableWrapper from '../../../common/components/MovableWrapper';
 
 const MainCanvas = ({ onDragCallBack, onClickCallBack, enablePan }) => {
   const myRef = useRef();
+  const [activeElement,setActiveElement] = useState({}); 
+  const [activeElementProperties,setActiveElementProperties] = useState(null);
+  
   // { activeElement, ids, elementMap }
   const [editorElements, setEditorElementState] = React.useState({
     ids: ['text', 'wave', 'subtitle'],
@@ -57,6 +60,7 @@ const MainCanvas = ({ onDragCallBack, onClickCallBack, enablePan }) => {
 
   const handleSelect = (activeElement) => {
     console.log('SELECT ACTIVE ELEMNT', activeElement);
+    setActiveElement(activeElement);
     setEditorElementState((prev) => ({ ...prev, activeElement }));
   };
 
@@ -114,7 +118,13 @@ const MainCanvas = ({ onDragCallBack, onClickCallBack, enablePan }) => {
           targetRef={editorElements.activeElement.ref}
           movableRef={movableRef}
           customOnResizeFunction={(target) => {
-            console.log(target);
+            console.log("custom",target,target.offsetWidth);
+            const newActiveElementProps = {
+              height : target.offsetHeight,
+              width: target.offsetWidth,
+              id: activeElement.id,
+            }
+            setActiveElementProperties(newActiveElementProps);
           }}
           onDragCallBack={onDragCallBack}
         />
@@ -126,6 +136,7 @@ const MainCanvas = ({ onDragCallBack, onClickCallBack, enablePan }) => {
               onSelect={handleSelect}
               key={id}
               onClickCallBack={onClickCallBack}
+              activeElementProperties={activeElementProperties}
             />
           );
         })}

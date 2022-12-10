@@ -43,7 +43,7 @@ export const AudioStream = (props) => {
                 }}
                 onLoadedData={() => {
                     console.log('Data loaded');
-                    // audioRef.current.play();
+                    audioRef.current.play();
                     // window.parent.postMessage({ message: 'START', hide: 'dbhchat', show: 'dbhchat' }, '*');
                 }}
             />

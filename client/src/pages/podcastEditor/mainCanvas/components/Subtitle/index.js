@@ -1,8 +1,9 @@
 import React from 'react';
 import audioJson from '../../assets/sampletrans.json';
 import { AudioStream } from './AudioStream';
+import TestText from './TestText';
 
-const Subtitles = () => {
+const Subtitles = ({element}) => {
   const [currentTime2, setCurrentTime2] = React.useState(0);
 
   const renderPagrgraph = () => {
@@ -31,7 +32,8 @@ const Subtitles = () => {
         flexWrap: 'wrap',
       }}
     >
-      {renderPagrgraph()}
+      {/* {renderPagrgraph()} */}
+      <TestText currentTime={currentTime2} element={element}/>
       <div className={'currentTime'}>
         <AudioStream
           src={'https://od.lk/s/MTBfMTk4NzU0OTc0Xw/sample-5.mp3'}

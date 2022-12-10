@@ -1,12 +1,50 @@
-import React from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import * as animationData from '../assets/16581-audio.json';
 import Lottie from 'react-lottie';
 import Paragraph from './Paragraph';
 import AudioWave from './AudioWave';
 import Subtitles from './Subtitle';
 
-const Element = ({ element, onChange, onSelect, onClickCallBack }) => {
+const Element = ({ element, onChange, onSelect, onClickCallBack, activeElementProperties }) => {
   const ref = React.useRef();
+  const [currentSize, setCurrentSize] = useState({ width: element.width, height: element.height });
+
+  // useEffect(()=>{
+  //   console.log("Called here rerender")
+  //   if(ref.current){
+  //     console.log("🚀 ~ file: Element.js:14 ~ useEffect ~ current", ref.current.style.width)
+      
+  //     const newSize = {
+  //       width: ref.current.offsetWidth,
+  //       height: ref.current.offsetHeight,
+  //     }
+  //     setCurrentSize(newSize);
+  //   }
+  // },[ref.current?.offsetWidth, ref.current?.offsetHeight])
+
+  useEffect(()=>{
+    if(activeElementProperties && activeElementProperties.id === "subtitle" && activeElementProperties.height){
+      const newSize = {
+        width: activeElementProperties.width,
+        height: activeElementProperties.height,
+      }
+        console.log("🚀 ~ file: Element.js:32 ~ useEffect ~ activeElementProperties.width", activeElementProperties)
+      setCurrentSize(newSize);
+    }
+  },[activeElementProperties, activeElementProperties?.id])
+
+  // useLayoutEffect(()=>{
+  //   console.log("Called here rerender")
+  //   if(ref.current){
+  //     console.log("🚀 ~ file: Element.js:14 ~ useEffect ~ current", ref.current.style.width)
+      
+  //     const newSize = {
+  //       width: ref.current.offsetWidth,
+  //       height: ref.current.offsetHeight,
+  //     }
+  //     setCurrentSize(newSize);
+  //   }
+  // },[ref.current.offsetWidth])
 
   return (
     <div
@@ -30,8 +68,12 @@ const Element = ({ element, onChange, onSelect, onClickCallBack }) => {
       }}
     >
       {element.id === 'text' && <Paragraph />}
-      {element.id === 'wave' && <AudioWave element={element} />}
-      {element.id === 'subtitle' && <Subtitles />}
+      {element.id === 'wave' && (
+        <AudioWave
+          element={element}
+        />
+      )}
+      {element.id === 'subtitle' && <Subtitles element={currentSize} />}
     </div>
   );
 };

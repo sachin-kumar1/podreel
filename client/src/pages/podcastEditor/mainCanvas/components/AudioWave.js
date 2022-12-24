@@ -1,6 +1,7 @@
 import React from 'react';
 import * as animationData from '../assets/16581-audio.json';
 import Lottie from 'react-lottie';
+import LineWave from './AudioWaves/LineWave';
 
 const AudioWave = ({ element }) => {
   const defaultOptions = {
@@ -13,13 +14,14 @@ const AudioWave = ({ element }) => {
   };
   return (
     <div>
-      <Lottie
+      {/* <Lottie
         options={defaultOptions}
         height={element.height}
         width={element.width}
         isStopped={false}
         isPaused={false}
-      />
+      /> */}
+      <LineWave element={element} />
     </div>
   );
 };

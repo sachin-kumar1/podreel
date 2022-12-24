@@ -1,49 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Element from './components/Element';
 import MovableWrapper from '../../../common/components/MovableWrapper';
+import { debounce } from '../../../common/helpers/utlis';
+import { updateEditor } from '../helpers/editor';
+import { parseComplexStyleProperty } from '../helpers/utils';
 
-const MainCanvas = ({ onDragCallBack, onClickCallBack, enablePan }) => {
+const MainCanvas = ({
+  onDragCallBack,
+  onClickCallBack,
+  enablePan,
+  editorElements,
+  setEditorElementState,
+}) => {
   const myRef = useRef();
-  const [activeElement,setActiveElement] = useState({}); 
-  const [activeElementProperties,setActiveElementProperties] = useState(null);
+  const [activeElement, setActiveElement] = useState({});
+  const [activeElementProperties, setActiveElementProperties] = useState(null);
   
   // { activeElement, ids, elementMap }
-  const [editorElements, setEditorElementState] = React.useState({
-    ids: ['text', 'wave', 'subtitle'],
-    elementMap: {
-      text: {
-        id: 'text',
-        width: 295,
-        height: 211,
-        background: 'tomato',
-        x: 17,
-        y: 5,
-        rotate: 0,
-      },
-      subtitle: {
-        id: 'subtitle',
-        width: 382,
-        height: 280,
-        background: 'blue',
-        x: 110,
-        y: 280,
-        rotate: 0,
-      },
-      wave: {
-        id: 'wave',
-        width: 250,
-        height: 150,
-        background: 'papayawhip',
-        x: 340,
-        y: 13,
-        rotate: 2.20779,
-      },
-    },
-    activeElement: {
-      id: undefined,
-      ref: undefined,
-    },
-  });
 
   const handleChange = ({ id, ...values }) => {
     setEditorElementState((prev) => ({
@@ -59,7 +32,6 @@ const MainCanvas = ({ onDragCallBack, onClickCallBack, enablePan }) => {
   };
 
   const handleSelect = (activeElement) => {
-    console.log('SELECT ACTIVE ELEMNT', activeElement);
     setActiveElement(activeElement);
     setEditorElementState((prev) => ({ ...prev, activeElement }));
   };
@@ -80,15 +52,40 @@ const MainCanvas = ({ onDragCallBack, onClickCallBack, enablePan }) => {
   });
 
   useEffect(() => {
-    // myRef.current.style.transform = 'translate(-50%, -50%) scale(2)';
-    myRef.current.style.transform = 'translate(-50%, -50%)';
+    myRef.current.style.transform = 'translate(-50%, -50%) scale(2)';
+    // myRef.current.style.transform = 'translate(-50%, -50%)';
   }, []);
+
+  const handleElementReSize = async (id, values) => {
+    console.log("Element resize")
+    const newEditorState = {
+      ...editorElements,
+      elementMap: {
+        ...editorElements.elementMap,
+        [id]: {
+          ...editorElements.elementMap[id],
+          ...values,
+        },
+      },
+    };
+    console.log(
+      '🚀 ~ file: index.js:59 ~ handleElementReSize ~ newEditorState',
+      newEditorState
+    );
+    await updateEditor(newEditorState);
+    setEditorElementState(newEditorState);
+  };
+
+  const debounceElementReSizeHandler = React.useCallback(
+    debounce(handleElementReSize,500),
+    []
+  );
 
   return (
     <div
       style={{
-        width: '100vw',
-        height: '100vh',
+        width: '100%',
+        height: '100%',
       }}
     >
       {/* rendering all the Editor elements */}
@@ -115,18 +112,34 @@ const MainCanvas = ({ onDragCallBack, onClickCallBack, enablePan }) => {
         }}
       >
         <MovableWrapper
+          activeElement={editorElements.activeElement}
           targetRef={editorElements.activeElement.ref}
           movableRef={movableRef}
           customOnResizeFunction={(target) => {
-            console.log("custom",target,target.offsetWidth);
             const newActiveElementProps = {
-              height : target.offsetHeight,
+              height: target.offsetHeight,
               width: target.offsetWidth,
               id: activeElement.id,
-            }
+            };
             setActiveElementProperties(newActiveElementProps);
+            debounceElementReSizeHandler(activeElement.id, {
+              height: target.offsetHeight,
+              width: target.offsetWidth,
+            });
           }}
-          onDragCallBack={onDragCallBack}
+          onDragCallBack={(e)=>{
+            const parsedTransFormValue = parseComplexStyleProperty(e.target.style.transform)
+            const newTransLateValue = parsedTransFormValue && parsedTransFormValue.translate && parsedTransFormValue.translate[0].split(',')
+            if(newTransLateValue){
+              const newXValue = parseFloat(newTransLateValue[0].trim());
+              const newYValue = parseFloat(newTransLateValue[1].trim());
+              debounceElementReSizeHandler(activeElement.id, {
+                x: newXValue,
+                y: newYValue,
+              });
+            }
+            onDragCallBack(e)
+          }}
         />
         {editorElements.ids.map((id) => {
           return (

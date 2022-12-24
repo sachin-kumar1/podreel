@@ -8,7 +8,6 @@ const Subtitles = ({element}) => {
 
   const renderPagrgraph = () => {
     const paragraph = audioJson.words.map((word) => {
-      // console.log(word.start, currentTime2, word.start <= currentTime2);
       if (word.start <= currentTime2) {
         return <h2 style={{ color: 'red' }}>{word.text}</h2>;
       }

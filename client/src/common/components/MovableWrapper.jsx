@@ -1,6 +1,6 @@
 import React from 'react'
 import Moveable from "react-moveable";
-const MovableWrapper = ({ targetRef, movableRef, customOnResizeFunction, onDragCallBack }) => {
+const MovableWrapper = ({ activeElement, targetRef, movableRef, customOnResizeFunction, onDragCallBack }) => {
     React.useEffect(() => {
         // console.log("current target ref values are", targetRef.current.style);
         // if (targetRef.current) {
@@ -15,6 +15,7 @@ const MovableWrapper = ({ targetRef, movableRef, customOnResizeFunction, onDragC
             movableRef.current.updateRect();
         }
     };
+    console.log("908",activeElement)
     return (
         <Moveable
             target={targetRef}
@@ -68,7 +69,7 @@ const MovableWrapper = ({ targetRef, movableRef, customOnResizeFunction, onDragC
                 console.log("onDragEnd", parseInt(target.style.height, 10), isDrag);
             }}
             /* When resize or scale, keeps a ratio of the width, height. */
-            // keepRatio={true}
+            keepRatio={activeElement && activeElement.type === "wave" ? true : false}
             /* resizable*/
             /* Only one of resizable, scalable, warpable can be used. */
             resizable={true}

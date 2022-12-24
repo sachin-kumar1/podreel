@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import audioJson from '../../assets/sampletrans.json';
+import EditorSubtitletext from './EditorSubtitletext';
+import MainSubtitleText from './MainSubtitleText';
 
 const TestText = ({ currentTime, element }) => {
-  console.log("🚀 ~ file: TestText.jsx:5 ~ TestText ~ element", element,element.width, element.height)
+  console.log(
+    '🚀 ~ file: TestText.jsx:5 ~ TestText ~ element',
+    element,
+    element.width,
+    element.height
+  );
   const sidePadding = 10;
   const textWidth = element.width;
   const textHeigth = element.height;
-  const fontSize = 20;
+  const fontSize = 45;
   const extra = 5;
   const lineHeight = 8;
 
   const [textChunks, setTextChunks] = useState([]);
-  const [numberOfLines, setNumberOfLines] = useState(0);
+  const [numberOfLines, setNumberOfLines] = useState(null);
   const [offSet, setOffSet] = useState(0);
 
   const getTextWidth = (text) => {
@@ -76,23 +83,38 @@ const TestText = ({ currentTime, element }) => {
     setNumberOfLines(Math.trunc(linesToRender));
   }, [textHeigth, textWidth]);
 
-  const getTextToRender = () => {
+  const getTextToRender = (currentTime) => {
+    console.log(
+      '🚀 ~ file: TestText.jsx:80 ~ getTextToRender ~ currentTime',
+      currentTime
+    );
+    console.log('The last check block is');
+    console.log(
+      '🚀 ~ file: TestText.jsx:87 ~ getTextToRender ~ textChunks',
+      textChunks
+    );
+
     let textVal = '';
+    let curOffSet = offSet;
+    console.log(
+      '🚀 ~ file: TestText.jsx:87 ~ getTextToRender ~ curOffSet',
+      curOffSet
+    );
 
     for (let i = 0; i < numberOfLines; i++) {
-      if (textChunks[i]) {
-        if (i !== 0) textVal += ' ' + textChunks[i];
-        else textVal += textChunks[i];
+      const curChunk = i + curOffSet;
+      if (textChunks[curChunk]) {
+        if (i !== 0) textVal += ' ' + textChunks[curChunk];
+        else textVal += textChunks[curChunk];
       }
     }
 
     const splitedText = textVal.split(' ');
     const splitedTextLength = splitedText.length;
 
-    const wordsToTake = audioJson.words.slice(offSet, splitedTextLength);
+    const wordsToTake = audioJson.words.slice(curOffSet, splitedTextLength);
 
     console.log('WTK', wordsToTake, splitedTextLength, audioJson.words.length);
-    // setOffSet(splitedTextLength);
 
     return wordsToTake;
   };
@@ -108,24 +130,13 @@ const TestText = ({ currentTime, element }) => {
         height: `${textHeigth}px`,
       }}
     >
-      {/* {numberOfLines &&
-          textChunks &&
-          textChunks.length > 0 &&
-          [...Array(numberOfLines).keys()].map((i) => {
-            return (
-              <p
-                style={{
-                  font: '20px Arial',
-                }}
-              >
-                {getTextToRender}
-              </p>
-            );
-          })} */}
-      {/* <p style={{
-                        "font": "20px Arial"
-                    }} >{audioJson.text}</p> */}
-      <div style={{ display: 'flex', flexDirection: 'column', padding: `${sidePadding}px`, }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          padding: `${sidePadding}px`,
+        }}
+      >
         {numberOfLines && textChunks && textChunks.length > 0 && (
           <div
             style={{
@@ -135,7 +146,7 @@ const TestText = ({ currentTime, element }) => {
               gap: `${lineHeight}px`,
             }}
           >
-            {getTextToRender().map((word, index) => {
+            {/* {getTextToRender(currentTime).map((word, index) => {
               return (
                 <span
                   style={{
@@ -147,7 +158,20 @@ const TestText = ({ currentTime, element }) => {
                   {word.text}
                 </span>
               );
-            })}
+            })} */}
+            {/* <EditorSubtitletext
+              textChunks={textChunks}
+              numberOfLines={numberOfLines}
+              audioJson={audioJson}
+              fontSize={fontSize}
+            /> */}
+            <MainSubtitleText
+              textChunks={textChunks}
+              numberOfLines={numberOfLines}
+              audioJson={audioJson}
+              currentTime={currentTime}
+              fontSize={fontSize}
+            />
           </div>
         )}
       </div>

@@ -7,6 +7,12 @@ var ffmpeg = require('fluent-ffmpeg');
 const file = fs.createWriteStream(__dirname + '/test.webm');
 var mp3Duration = require('mp3-duration');
 const { getVideoDurationInSeconds } = require('get-video-duration');
+
+const {convertToRaw,convertFromRaw} = require("draft-js")
+
+const draftToHtml = require("draftjs-to-html")
+
+const {stateToHTML} = require("draft-js-export-html");
 // async function test() {
 //   const browser = await launch({
 //     headless: true,
@@ -39,7 +45,7 @@ const { getVideoDurationInSeconds } = require('get-video-duration');
 
 const captureVideo = async () => {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless:true,
   });
   const page = await browser.newPage();
   await page.setViewport({
@@ -86,7 +92,9 @@ const captureVideo = async () => {
   };
 
   const recorder = new PuppeteerScreenRecorder(page, Config);
-  await page.goto('http://localhost:3000');
+  await page.goto('http://localhost:3000',{
+    waitUntil: 'networkidle0'
+  });
 
   await page.evaluate(() => {
     document.querySelector('.foo').click();
@@ -131,7 +139,7 @@ const fileMerge = async (mp3FileName) => {
       ffmpeg()
         .addInput(croppedVideoFileName)
         .addInput(originalAudioFile)
-        .saveToFile('./temp/out8.mp4');
+        .saveToFile('./temp/out9.mp4');
     });
 
   // merging the two videos
@@ -156,3 +164,90 @@ const fileMerge = async (mp3FileName) => {
 };
 
 // fileMerge();
+
+const draftObject = {
+  "entityMap": {
+      "0": {
+          "type": "LINK",
+          "mutability": "MUTABLE",
+          "data": {
+              "href": "https://www.facebook.com",
+              "url": "https://www.facebook.com/"
+          }
+      },
+      "1": {
+          "type": "IMAGE",
+          "mutability": "MUTABLE",
+          "data": {
+              "height": "112",
+              "src": "https://raw.githubusercontent.com/facebook/draft-js/master/examples/draft-0-10-0/convertFromHTML/image.png",
+              "width": "200"
+          }
+      }
+  },
+  "blocks": [
+      {
+          "key": "at9qa",
+          "text": "Bold text, Italic text\n",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [
+              {
+                  "offset": 0,
+                  "length": 9,
+                  "style": "BOLD"
+              },
+              {
+                  "offset": 11,
+                  "length": 11,
+                  "style": "ITALIC"
+              }
+          ],
+          "entityRanges": [],
+          "data": {}
+      },
+      {
+          "key": "c8dpd",
+          "text": "Example link\n",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [
+              {
+                  "offset": 0,
+                  "length": 12,
+                  "key": 0
+              }
+          ],
+          "data": {}
+      },
+      {
+          "key": "6fg6q",
+          "text": "https://raw.githubusercontent.com/facebook/draft-js/master/examples/draft-0-10-0/convertFromHTML/image.png",
+          "type": "unstyled",
+          "depth": 0,
+          "inlineStyleRanges": [],
+          "entityRanges": [
+              {
+                  "offset": 0,
+                  "length": 106,
+                  "key": 1
+              }
+          ],
+          "data": {}
+      }
+  ]
+}
+
+
+// const convertDraftToHtmlValue = () => {
+//   const markup = draftToHtml(
+//     draftObject, 
+//   );
+//   console.log("🚀 ~ file: index.js:254 ~ convertDraftToHtmlValue ~ markup", markup)
+  
+//   // let html = stateToHTML(draftObject);  
+//   // console.log("🚀 ~ file: index.js:240 ~ convertDraftToHtmlValue ~ html", html())
+// }
+
+// convertDraftToHtmlValue();

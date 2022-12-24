@@ -4,6 +4,7 @@ import Lottie from 'react-lottie';
 import Paragraph from './Paragraph';
 import AudioWave from './AudioWave';
 import Subtitles from './Subtitle';
+import Image from './Image';
 
 const Element = ({ element, onChange, onSelect, onClickCallBack, activeElementProperties }) => {
   const ref = React.useRef();
@@ -51,7 +52,7 @@ const Element = ({ element, onChange, onSelect, onClickCallBack, activeElementPr
       ref={ref}
       onClick={(e) => {
         e.stopPropagation();
-        onSelect({ id: element.id, ref: ref.current });
+        onSelect({ id: element.id, ref: ref.current, type: element.type });
         if (onClickCallBack) {
           onClickCallBack();
         }
@@ -65,15 +66,17 @@ const Element = ({ element, onChange, onSelect, onClickCallBack, activeElementPr
         top: 0,
         left: 0,
         transform: `translate(${element.x}px, ${element.y}px) rotate(${element.rotate}deg)`,
+        zIndex: element.index
       }}
     >
-      {element.id === 'text' && <Paragraph />}
-      {element.id === 'wave' && (
+      {element.type === 'text' && <Paragraph />}
+      {element.type === 'wave' && (
         <AudioWave
           element={element}
         />
       )}
-      {element.id === 'subtitle' && <Subtitles element={currentSize} />}
+      {element.type === 'subtitle' && <Subtitles element={currentSize} />}
+      {element.type === 'image' && <Image element={element} />}
     </div>
   );
 };

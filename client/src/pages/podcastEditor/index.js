@@ -7,11 +7,20 @@ import _ from 'lodash';
 import { debounce } from '../../common/helpers/utlis';
 import { updateEditor } from './helpers/editor';
 import uuid from 'react-uuid';
+import SidePane from './mainCanvas/components/SidePane';
+import {
+  circleElemenetInitProps,
+  imageElementInitProps,
+  squareElemenetInitProps,
+  textElementInitProps,
+  textElementSubHeadingInitProps,
+} from './mainCanvas/components/Constants/elements';
 
 const PodCastEditor = () => {
   let [zoomIn, setZoomIn] = useState(null);
   let panRef = useRef(null);
   let [disablePan, setDisablePan] = useState(false);
+  const [curZoomState, setCurrentZoomState] = useState(1);
 
   const [editorLoaded, setEditorLoaded] = useState(false);
 
@@ -28,11 +37,16 @@ const PodCastEditor = () => {
     let res = await axios.get('http://localhost:5000/editor-contents');
     if (res.data) {
       const currentEditorState = res.data.editorState[0];
+      console.log(
+        '🚀 ~ file: index.js:34 ~ getEditorState ~ currentEditorState',
+        currentEditorState
+      );
       const newEditorState = {
         ...editorElements,
         ids: [...currentEditorState.ids],
         elementMap: { ...currentEditorState.elementMap },
         key: currentEditorState._id,
+        properties: currentEditorState.editorProperties,
       };
       setEditorElementState(newEditorState);
       setEditorLoaded(true);
@@ -67,39 +81,83 @@ const PodCastEditor = () => {
     setDisablePan(false);
   };
 
-  const addTextElement = async () => {
-    const id = 'text2';
-    const textBody = {
+  const addElementType = async (type, properties= {}) => {
+    const id = uuid();
+    let elementProps = {
       id: id,
-      width: 250,
-      height: 170,
-      background: 'blue',
-      x: 70,
-      y: 50,
-      rotate: 0,
-      type: 'text',
       index: editorElements.ids.length,
     };
+
+    if (type === 'heading') {
+      elementProps = {
+        ...elementProps,
+        ...textElementInitProps,
+      };
+    }
+    if (type === 'subHeading') {
+      elementProps = {
+        ...elementProps,
+        ...textElementSubHeadingInitProps,
+      };
+    }
+    if (type === 'square') {
+      elementProps = {
+        ...elementProps,
+        ...squareElemenetInitProps,
+      };
+    }
+    if (type === 'circle') {
+      elementProps = {
+        ...elementProps,
+        ...circleElemenetInitProps,
+      };
+    }
+    if(type === "image"){
+      elementProps = {
+        ...elementProps,
+        ...imageElementInitProps,
+        src: properties.src
+      }
+    }
 
     const newEditorState = {
       ...editorElements,
       ids: [...editorElements.ids, id],
-      elementMap: { ...editorElements.elementMap, ...{ [id]: textBody } },
+      elementMap: { ...editorElements.elementMap, ...{ [id]: elementProps } },
     };
 
-    await axios.put(
-      `http://localhost:5000/editor-contents/update/${newEditorState.key}`,
-      {
-        ids: newEditorState.ids,
-        elementMap: newEditorState.elementMap,
-      }
-    );
+    // await axios.put(
+    //   `http://localhost:5000/editor-contents/update/${newEditorState.key}`,
+    //   {
+    //     ids: newEditorState.ids,
+    //     elementMap: newEditorState.elementMap,
+    //   }
+    // );
 
     console.log(
       newEditorState.ids,
       newEditorState.elementMap,
       newEditorState.key
     );
+
+    setEditorElementState(newEditorState);
+  };
+
+  const handleEditorProperty = async (type) => {
+    let properties;
+    if (type === 'backgroundColor') {
+      properties = {
+        ...editorElements.properties,
+        editorStyle: 'color',
+        editorBackgroundColor: 'red',
+      };
+    }
+
+    const newEditorState = {
+      ...editorElements,
+      properties
+    };
+    console.log("🚀 ~ file: index.js:149 ~ handleEditorProperty ~ newEditorState", newEditorState)
 
     setEditorElementState(newEditorState);
   };
@@ -145,47 +203,39 @@ const PodCastEditor = () => {
     return <h1>Loading Editor</h1>;
   }
 
+  const addElementToCanvas = async (type, properties = {}) => {
+    if (type === 'heading') {
+      await addElementType(type);
+    }
+    if (type === 'subHeading') {
+      await addElementType(type);
+    }
+    if (type === 'square') {
+      await addElementType(type);
+    }
+    if (type === 'circle') {
+      await addElementType(type);
+    }
+    if (type === 'backgroundColor') {
+      await handleEditorProperty(type);
+    }
+    if(type === 'image'){
+      await addElementType(type, properties);
+    }
+  };
+
+  console.log(editorElements);
+
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <Dock
-        size={400}
+        size={530}
         position="left"
-        isVisible={false}
+        isVisible={true}
         fluid={false}
         dimMode={'none'}
       >
-        <div>X</div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <button
-            onClick={async () => {
-              console.log('ADD A TEXT ELEMENT');
-              await addTextElement();
-            }}
-          >
-            ADD TEXT FIELD
-          </button>
-          <button
-            onClick={async () => {
-              console.log('ADD A TEXT ELEMENT');
-              await addImageElement();
-            }}
-          >
-            ADD IMAGE FIELD
-          </button>
-          <button
-            onClick={() => {
-              console.log(editorElements);
-            }}
-          >
-            LOG STATE
-          </button>
-        </div>
+        <SidePane addElementToCanvas={addElementToCanvas} />
       </Dock>
       <TransformWrapper
         ref={panRef}
@@ -199,6 +249,10 @@ const PodCastEditor = () => {
         doubleClick={{
           disabled: true,
         }}
+        onZoom={(e) => {
+          console.log('ZOOM STARTED', e.state.scale);
+          setCurrentZoomState(e.state.scale);
+        }}
       >
         {({ zoomIn, zoomOut, resetTransform, ...rest }) => {
           setZoomIn(() => {
@@ -207,7 +261,6 @@ const PodCastEditor = () => {
           return (
             <div
               style={{
-                backgroundColor: 'olive',
                 width: '100%',
                 height: '100%',
               }}
@@ -219,7 +272,7 @@ const PodCastEditor = () => {
               </div> */}
               <div
                 style={{
-                  backgroundColor: 'pink',
+                  backgroundColor: '#F5F5F5',
                   width: '100%',
                   height: '100%',
                 }}
@@ -234,6 +287,7 @@ const PodCastEditor = () => {
                     enablePan={enablePan}
                     editorElements={editorElements}
                     setEditorElementState={setEditorElementState}
+                    zoomState={curZoomState}
                   />
                 </TransformComponent>
               </div>

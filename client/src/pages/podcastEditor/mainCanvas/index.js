@@ -11,10 +11,10 @@ const MainCanvas = ({
   enablePan,
   editorElements,
   setEditorElementState,
+  zoomState
 }) => {
   const myRef = useRef();
   const [activeElement, setActiveElement] = useState({});
-  const [activeElementProperties, setActiveElementProperties] = useState(null);
   
   // { activeElement, ids, elementMap }
 
@@ -52,8 +52,8 @@ const MainCanvas = ({
   });
 
   useEffect(() => {
-    myRef.current.style.transform = 'translate(-50%, -50%) scale(2)';
-    // myRef.current.style.transform = 'translate(-50%, -50%)';
+    // myRef.current.style.transform = 'translate(-50%, -50%) scale(2)';
+    myRef.current.style.transform = 'translate(-50%, -50%)';
   }, []);
 
   const handleElementReSize = async (id, values) => {
@@ -72,7 +72,7 @@ const MainCanvas = ({
       '🚀 ~ file: index.js:59 ~ handleElementReSize ~ newEditorState',
       newEditorState
     );
-    await updateEditor(newEditorState);
+    // await updateEditor(newEditorState);
     setEditorElementState(newEditorState);
   };
 
@@ -81,6 +81,27 @@ const MainCanvas = ({
     []
   );
 
+  const editorBackGroundColor = editorElements.properties;
+  console.log("🚀 ~ file: index.js:85 ~ editorBackGroundColor", editorBackGroundColor)
+
+  const getEditorStyle = () => {
+    let style = {
+      top: '50%',
+      left: '65%', // change this to 50% when it is in prod
+      width: '960px',
+      height: '540px',
+      border: '1px',
+      position: 'fixed',
+      overflow: 'hidden',
+    }
+    const editorProperties= editorElements.properties;
+
+    if(editorProperties.editorStyle === "color"){
+      style = {...style,backgroundColor:editorProperties.editorBackgroundColor}
+    }
+
+    return style;
+  }
   return (
     <div
       style={{
@@ -90,16 +111,7 @@ const MainCanvas = ({
     >
       {/* rendering all the Editor elements */}
       <div
-        style={{
-          top: '50%',
-          left: '50%',
-          width: '960px',
-          height: '540px',
-          border: '1px',
-          position: 'fixed',
-          backgroundColor: 'grey',
-          overflow: 'hidden',
-        }}
+        style={getEditorStyle()}
         ref={myRef}
         onClick={(e) => {
           e.preventDefault();
@@ -116,13 +128,7 @@ const MainCanvas = ({
           targetRef={editorElements.activeElement.ref}
           movableRef={movableRef}
           customOnResizeFunction={(target) => {
-            const newActiveElementProps = {
-              height: target.offsetHeight,
-              width: target.offsetWidth,
-              id: activeElement.id,
-            };
-            setActiveElementProperties(newActiveElementProps);
-            debounceElementReSizeHandler(activeElement.id, {
+            handleElementReSize(activeElement.id, {
               height: target.offsetHeight,
               width: target.offsetWidth,
             });
@@ -133,13 +139,14 @@ const MainCanvas = ({
             if(newTransLateValue){
               const newXValue = parseFloat(newTransLateValue[0].trim());
               const newYValue = parseFloat(newTransLateValue[1].trim());
-              debounceElementReSizeHandler(activeElement.id, {
+              handleElementReSize(activeElement.id, {
                 x: newXValue,
                 y: newYValue,
               });
             }
             onDragCallBack(e)
           }}
+          zoomState={zoomState}
         />
         {editorElements.ids.map((id) => {
           return (
@@ -149,7 +156,6 @@ const MainCanvas = ({
               onSelect={handleSelect}
               key={id}
               onClickCallBack={onClickCallBack}
-              activeElementProperties={activeElementProperties}
             />
           );
         })}

@@ -159,19 +159,19 @@ const TestText = ({ currentTime, element }) => {
                 </span>
               );
             })} */}
-            {/* <EditorSubtitletext
+            <EditorSubtitletext
               textChunks={textChunks}
               numberOfLines={numberOfLines}
               audioJson={audioJson}
               fontSize={fontSize}
-            /> */}
-            <MainSubtitleText
+            />
+            {/* <MainSubtitleText
               textChunks={textChunks}
               numberOfLines={numberOfLines}
               audioJson={audioJson}
               currentTime={currentTime}
               fontSize={fontSize}
-            />
+            /> */}
           </div>
         )}
       </div>

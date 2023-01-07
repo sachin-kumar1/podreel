@@ -5,16 +5,21 @@ import Paragraph from './Paragraph';
 import AudioWave from './AudioWave';
 import Subtitles from './Subtitle';
 import Image from './Image';
+import ShapeElement from './ShapeElement';
 
-const Element = ({ element, onChange, onSelect, onClickCallBack, activeElementProperties }) => {
+const Element = ({
+  element,
+  onChange,
+  onSelect,
+  onClickCallBack,
+}) => {
   const ref = React.useRef();
-  const [currentSize, setCurrentSize] = useState({ width: element.width, height: element.height });
 
   // useEffect(()=>{
   //   console.log("Called here rerender")
   //   if(ref.current){
   //     console.log("🚀 ~ file: Element.js:14 ~ useEffect ~ current", ref.current.style.width)
-      
+
   //     const newSize = {
   //       width: ref.current.offsetWidth,
   //       height: ref.current.offsetHeight,
@@ -23,22 +28,29 @@ const Element = ({ element, onChange, onSelect, onClickCallBack, activeElementPr
   //   }
   // },[ref.current?.offsetWidth, ref.current?.offsetHeight])
 
-  useEffect(()=>{
-    if(activeElementProperties && activeElementProperties.id === "subtitle" && activeElementProperties.height){
-      const newSize = {
-        width: activeElementProperties.width,
-        height: activeElementProperties.height,
-      }
-        console.log("🚀 ~ file: Element.js:32 ~ useEffect ~ activeElementProperties.width", activeElementProperties)
-      setCurrentSize(newSize);
-    }
-  },[activeElementProperties, activeElementProperties?.id])
+  // useEffect(() => {
+  //   if (
+  //     activeElementProperties &&
+  //     activeElementProperties.id === 'subtitle' &&
+  //     activeElementProperties.height
+  //   ) {
+  //     const newSize = {
+  //       width: activeElementProperties.width,
+  //       height: activeElementProperties.height,
+  //     };
+  //     console.log(
+  //       '🚀 ~ file: Element.js:32 ~ useEffect ~ activeElementProperties.width',
+  //       activeElementProperties
+  //     );
+  //     setCurrentSize(newSize);
+  //   }
+  // }, [activeElementProperties, activeElementProperties?.id]);
 
   // useLayoutEffect(()=>{
   //   console.log("Called here rerender")
   //   if(ref.current){
   //     console.log("🚀 ~ file: Element.js:14 ~ useEffect ~ current", ref.current.style.width)
-      
+
   //     const newSize = {
   //       width: ref.current.offsetWidth,
   //       height: ref.current.offsetHeight,
@@ -57,6 +69,13 @@ const Element = ({ element, onChange, onSelect, onClickCallBack, activeElementPr
           onClickCallBack();
         }
       }}
+      // onMouseEnter={(e)=>{
+      //   e.stopPropagation();
+      //   onSelect({ id: element.id, ref: ref.current, type: element.type });
+      //   if (onClickCallBack) {
+      //     onClickCallBack();
+      //   }
+      // }}
       style={{
         overflow: 'hidden',
         background: element.background,
@@ -66,17 +85,16 @@ const Element = ({ element, onChange, onSelect, onClickCallBack, activeElementPr
         top: 0,
         left: 0,
         transform: `translate(${element.x}px, ${element.y}px) rotate(${element.rotate}deg)`,
-        zIndex: element.index
+        zIndex: element.index,
       }}
     >
-      {element.type === 'text' && <Paragraph />}
-      {element.type === 'wave' && (
-        <AudioWave
-          element={element}
-        />
+      {element.type === 'text' && <Paragraph element={element} />}
+      {element.type === 'wave' && <AudioWave element={element} />}
+      {element.type === 'subtitle' && (
+        <Subtitles element={{ width: element.width, height: element.height }} />
       )}
-      {element.type === 'subtitle' && <Subtitles element={currentSize} />}
       {element.type === 'image' && <Image element={element} />}
+      {element.type === 'shapes' && <ShapeElement element={element} />}
     </div>
   );
 };

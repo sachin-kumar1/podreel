@@ -21,7 +21,8 @@ exports.createEditorState = async(req,res,next) => {
     try {
         editorState = new Editor({
             ids:data.ids,
-            elementMap:data.elementMap
+            elementMap:data.elementMap,
+            editorProperties: data.editorProperties
         })
         console.log("🚀 ~ file: editor-controller.js:7 ~ getEditorState ~ editorState", editorState);
         await editorState.save();
@@ -42,7 +43,8 @@ exports.updateEditorState = async(req,res,next) => {
     try {
         editorState = await Editor.findByIdAndUpdate(id,{
             ids:data.ids,
-            elementMap:data.elementMap
+            elementMap:data.elementMap,
+            editorProperties: data.editorProperties
         })
         console.log("🚀 ~ file: editor-controller.js:7 ~ getEditorState ~ editorState", editorState);
         // await editorState.save();

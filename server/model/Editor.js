@@ -7,6 +7,9 @@ const editorSchema = new Schema({
     },
     elementMap:{
         type: Object
+    },
+    editorProperties:{
+        type: Object
     }
 })
 

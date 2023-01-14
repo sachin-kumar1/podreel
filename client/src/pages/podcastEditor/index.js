@@ -15,6 +15,7 @@ import {
   textElementInitProps,
   textElementSubHeadingInitProps,
 } from './mainCanvas/components/Constants/elements';
+import MainTopBar from './MainTopBar';
 
 const PodCastEditor = () => {
   let [zoomIn, setZoomIn] = useState(null);
@@ -81,7 +82,7 @@ const PodCastEditor = () => {
     setDisablePan(false);
   };
 
-  const addElementType = async (type, properties= {}) => {
+  const addElementType = async (type, properties = {}) => {
     const id = uuid();
     let elementProps = {
       id: id,
@@ -112,12 +113,12 @@ const PodCastEditor = () => {
         ...circleElemenetInitProps,
       };
     }
-    if(type === "image"){
+    if (type === 'image') {
       elementProps = {
         ...elementProps,
         ...imageElementInitProps,
-        src: properties.src
-      }
+        src: properties.src,
+      };
     }
 
     const newEditorState = {
@@ -155,9 +156,12 @@ const PodCastEditor = () => {
 
     const newEditorState = {
       ...editorElements,
-      properties
+      properties,
     };
-    console.log("🚀 ~ file: index.js:149 ~ handleEditorProperty ~ newEditorState", newEditorState)
+    console.log(
+      '🚀 ~ file: index.js:149 ~ handleEditorProperty ~ newEditorState',
+      newEditorState
+    );
 
     setEditorElementState(newEditorState);
   };
@@ -219,7 +223,7 @@ const PodCastEditor = () => {
     if (type === 'backgroundColor') {
       await handleEditorProperty(type);
     }
-    if(type === 'image'){
+    if (type === 'image') {
       await addElementType(type, properties);
     }
   };
@@ -227,74 +231,29 @@ const PodCastEditor = () => {
   console.log(editorElements);
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
-      <Dock
-        size={530}
-        position="left"
-        isVisible={true}
-        fluid={false}
-        dimMode={'none'}
-      >
-        <SidePane addElementToCanvas={addElementToCanvas} />
-      </Dock>
-      <TransformWrapper
-        ref={panRef}
-        initialScale={1}
-        // initialPositionX={200}
-        // initialPositionY={100}
-        panning={{
-          disabled: disablePan,
-        }}
-        // disabled={disablePan}
-        doubleClick={{
-          disabled: true,
-        }}
-        onZoom={(e) => {
-          console.log('ZOOM STARTED', e.state.scale);
-          setCurrentZoomState(e.state.scale);
-        }}
-      >
-        {({ zoomIn, zoomOut, resetTransform, ...rest }) => {
-          setZoomIn(() => {
-            // zoomIn();
-          });
-          return (
-            <div
-              style={{
-                width: '100%',
-                height: '100%',
-              }}
-            >
-              {/* <div className="tools">
-                <button onClick={() => zoomIn()}>+</button>
-                <button onClick={() => zoomOut()}>-</button>
-                <button onClick={() => resetTransform()}>x</button>
-              </div> */}
-              <div
-                style={{
-                  backgroundColor: '#F5F5F5',
-                  width: '100%',
-                  height: '100%',
-                }}
-              >
-                <TransformComponent
-                  wrapperStyle={{ width: '100%', height: '100%' }}
-                  contentStyle={{ width: '100%', height: '100%' }}
-                >
-                  <MainCanvas
-                    onDragCallBack={onDragCallBack}
-                    onClickCallBack={onClickCallBack}
-                    enablePan={enablePan}
-                    editorElements={editorElements}
-                    setEditorElementState={setEditorElementState}
-                    zoomState={curZoomState}
-                  />
-                </TransformComponent>
-              </div>
-            </div>
-          );
-        }}
-      </TransformWrapper>
+    <div style={{ width: '100%', height: '100%', overflow:"hidden"}}>
+      <MainTopBar />
+      <div style={{ width: '100%', height: '100%' }}>
+        <Dock
+          size={530}
+          position="left"
+          isVisible={true}
+          fluid={false}
+          dimMode={'none'}
+        >
+          <SidePane addElementToCanvas={addElementToCanvas} />
+        </Dock>
+        <div style={{ width: '100%', height: '100%',"backgroundColor":"#F5F5F5"}} >
+          <MainCanvas
+            onDragCallBack={onDragCallBack}
+            onClickCallBack={onClickCallBack}
+            enablePan={enablePan}
+            editorElements={editorElements}
+            setEditorElementState={setEditorElementState}
+            zoomState={curZoomState}
+          />
+        </div>
+      </div>
     </div>
   );
 };

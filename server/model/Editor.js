@@ -10,6 +10,10 @@ const editorSchema = new Schema({
     },
     editorProperties:{
         type: Object
+    },
+    project:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Project"
     }
 })
 

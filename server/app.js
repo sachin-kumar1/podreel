@@ -2,10 +2,12 @@ var express = require('express');
 var cors = require('cors');
 const mongoose = require('mongoose');
 const editorRouter = require('./routes/editor-routes');
+const audioTranscriptionRouter = require('./routes/audio-transcription-routes');
 const app = express();
 app.use(cors());
 app.use(express.json())
 app.use("/editor-contents",editorRouter)
+app.use("/audio",audioTranscriptionRouter)
 
 mongoose
   .connect(
@@ -15,6 +17,7 @@ mongoose
     app.use('/editor/contents', (req, res, next) => {
       res.send({ okay: 'test' });
     });
+
 
     app.listen(5000, () => {
       console.log('APP IS RUNNING at port 5000');

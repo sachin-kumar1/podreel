@@ -1,21 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
-import MainCanvas from './mainCanvas';
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import { Dock } from 'react-dock';
-import axios from 'axios';
-import _ from 'lodash';
-import { debounce } from '../../common/helpers/utlis';
-import { updateEditor } from './helpers/editor';
-import uuid from 'react-uuid';
-import SidePane from './mainCanvas/components/SidePane';
+import React, { useEffect, useRef, useState } from "react";
+import MainCanvas from "./mainCanvas";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { Dock } from "react-dock";
+import axios from "axios";
+import _ from "lodash";
+import { debounce } from "../../common/helpers/utlis";
+import { updateEditor } from "./helpers/editor";
+import uuid from "react-uuid";
+import SidePane from "./mainCanvas/components/SidePane";
 import {
   circleElemenetInitProps,
   imageElementInitProps,
   squareElemenetInitProps,
   textElementInitProps,
   textElementSubHeadingInitProps,
-} from './mainCanvas/components/Constants/elements';
-import MainTopBar from './MainTopBar';
+} from "./mainCanvas/components/Constants/elements";
+import MainTopBar from "./MainTopBar";
 
 const PodCastEditor = () => {
   let [zoomIn, setZoomIn] = useState(null);
@@ -35,11 +35,11 @@ const PodCastEditor = () => {
   });
 
   const getEditorState = async () => {
-    let res = await axios.get('http://localhost:5000/editor-contents');
+    let res = await axios.get("http://localhost:5000/editor-contents");
     if (res.data) {
       const currentEditorState = res.data.editorState[0];
       console.log(
-        '🚀 ~ file: index.js:34 ~ getEditorState ~ currentEditorState',
+        "🚀 ~ file: index.js:34 ~ getEditorState ~ currentEditorState",
         currentEditorState
       );
       const newEditorState = {
@@ -63,14 +63,14 @@ const PodCastEditor = () => {
       // panRef.current.zoomIn();
       // panRef.current.zoomOut();
 
-      console.log('Panref');
+      console.log("Panref");
       // panRef();
     }
     // panRef();
   }, [panRef.current]);
 
   const onDragCallBack = (e) => {
-    console.log('Drag is called', e);
+    console.log("Drag is called", e);
     setDisablePan(true);
   };
 
@@ -89,31 +89,31 @@ const PodCastEditor = () => {
       index: editorElements.ids.length,
     };
 
-    if (type === 'heading') {
+    if (type === "heading") {
       elementProps = {
         ...elementProps,
         ...textElementInitProps,
       };
     }
-    if (type === 'subHeading') {
+    if (type === "subHeading") {
       elementProps = {
         ...elementProps,
         ...textElementSubHeadingInitProps,
       };
     }
-    if (type === 'square') {
+    if (type === "square") {
       elementProps = {
         ...elementProps,
         ...squareElemenetInitProps,
       };
     }
-    if (type === 'circle') {
+    if (type === "circle") {
       elementProps = {
         ...elementProps,
         ...circleElemenetInitProps,
       };
     }
-    if (type === 'image') {
+    if (type === "image") {
       elementProps = {
         ...elementProps,
         ...imageElementInitProps,
@@ -146,11 +146,11 @@ const PodCastEditor = () => {
 
   const handleEditorProperty = async (type) => {
     let properties;
-    if (type === 'backgroundColor') {
+    if (type === "backgroundColor") {
       properties = {
         ...editorElements.properties,
-        editorStyle: 'color',
-        editorBackgroundColor: 'red',
+        editorStyle: "color",
+        editorBackgroundColor: "red",
       };
     }
 
@@ -159,7 +159,7 @@ const PodCastEditor = () => {
       properties,
     };
     console.log(
-      '🚀 ~ file: index.js:149 ~ handleEditorProperty ~ newEditorState',
+      "🚀 ~ file: index.js:149 ~ handleEditorProperty ~ newEditorState",
       newEditorState
     );
 
@@ -172,11 +172,11 @@ const PodCastEditor = () => {
       id: id,
       width: 250,
       height: 170,
-      background: 'transparent',
+      background: "transparent",
       x: 70,
       y: 50,
       rotate: 0,
-      type: 'image',
+      type: "image",
       index: editorElements.ids.length,
     };
 
@@ -208,22 +208,22 @@ const PodCastEditor = () => {
   }
 
   const addElementToCanvas = async (type, properties = {}) => {
-    if (type === 'heading') {
+    if (type === "heading") {
       await addElementType(type);
     }
-    if (type === 'subHeading') {
+    if (type === "subHeading") {
       await addElementType(type);
     }
-    if (type === 'square') {
+    if (type === "square") {
       await addElementType(type);
     }
-    if (type === 'circle') {
+    if (type === "circle") {
       await addElementType(type);
     }
-    if (type === 'backgroundColor') {
+    if (type === "backgroundColor") {
       await handleEditorProperty(type);
     }
-    if (type === 'image') {
+    if (type === "image") {
       await addElementType(type, properties);
     }
   };
@@ -231,19 +231,21 @@ const PodCastEditor = () => {
   console.log(editorElements);
 
   return (
-    <div style={{ width: '100%', height: '100%', overflow:"hidden"}}>
+    <div style={{ width: "100%", height: "100%", overflow: "hidden" }}>
       <MainTopBar />
-      <div style={{ width: '100%', height: '100%' }}>
+      <div style={{ width: "100%", height: "100%" }}>
         <Dock
-          size={530}
+          size={550}
           position="left"
           isVisible={true}
           fluid={false}
-          dimMode={'none'}
+          dimMode={"none"}
         >
           <SidePane addElementToCanvas={addElementToCanvas} />
         </Dock>
-        <div style={{ width: '100%', height: '100%',"backgroundColor":"#F5F5F5"}} >
+        <div
+          style={{ width: "100%", height: "100%", backgroundColor: "#F5F5F5" }}
+        >
           <MainCanvas
             onDragCallBack={onDragCallBack}
             onClickCallBack={onClickCallBack}

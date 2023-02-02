@@ -1,4 +1,57 @@
 html, body, #root, #root>div {
+  margin: 0;
   height: 100%;
   width: 100%
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+::-webkit-scrollbar:vertical {
+  width: 5px;
+}
+::-webkit-scrollbar:horizontal {
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #CCCCCC;
+  border-radius: 10px;
+  border: 1px solid #CCCCCC;
+  height: 100px;
+}
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #18191B;
+}
+
+/* chat bubble arrow for templates */
+.chat-bb-temp:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 10px solid transparent;
+  border-right: 10px solid #5E60CE;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  left: -19px;
+  top: 45%;
+}
+
+
+input[type=range] {
+  /* -webkit-appearance: none; */
+  background-color: silver;
+  height:5px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  cursor: pointer;
+  -webkit-appearance: none;
+  background-color: #ffffff;
+  border: 3px solid #7400B8;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
 }

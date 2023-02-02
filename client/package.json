@@ -20,9 +20,11 @@
     "react-audio-visuals": "^0.1.2",
     "react-audio-viz": "0.0.4",
     "react-avatar-editor": "^13.0.0",
+    "react-colorful": "^5.6.1",
     "react-dock": "^0.6.0",
     "react-dom": "^18.2.0",
     "react-dynamic-font": "^2.0.1",
+    "react-icons": "^4.7.1",
     "react-image-crop": "^10.0.9",
     "react-inlinesvg": "^3.0.1",
     "react-konva": "^18.2.3",
@@ -67,5 +69,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.2.4"
   }
 }

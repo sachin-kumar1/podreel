@@ -1,5 +1,5 @@
-import React from 'react';
-import SVG from 'react-inlinesvg';
+import React from "react";
+import SVG from "react-inlinesvg";
 
 const TranscriptSVG = () => {
   const transcariptSVG =

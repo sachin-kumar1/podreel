@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Element from './components/Element';
-import MovableWrapper from '../../../common/components/MovableWrapper';
-import { debounce } from '../../../common/helpers/utlis';
-import { updateEditor } from '../helpers/editor';
-import { parseComplexStyleProperty } from '../helpers/utils';
+import React, { useEffect, useRef, useState } from "react";
+import Element from "./components/Element";
+import MovableWrapper from "../../../common/components/MovableWrapper";
+import { debounce } from "../../../common/helpers/utlis";
+import { updateEditor } from "../helpers/editor";
+import { parseComplexStyleProperty } from "../helpers/utils";
 
 const MainCanvas = ({
   onDragCallBack,
@@ -11,11 +11,11 @@ const MainCanvas = ({
   enablePan,
   editorElements,
   setEditorElementState,
-  zoomState
+  zoomState,
 }) => {
   const myRef = useRef();
   const [activeElement, setActiveElement] = useState({});
-  
+
   // { activeElement, ids, elementMap }
 
   const handleChange = ({ id, ...values }) => {
@@ -42,22 +42,22 @@ const MainCanvas = ({
   // const onDragCallBack = () => {};
   const handleClickOutside = (e) => {
     if (!myRef.current.contains(e.target)) {
-      console.log('OUTSIDE CLICK');
+      console.log("OUTSIDE CLICK");
     }
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   });
 
   useEffect(() => {
     // myRef.current.style.transform = 'translate(-50%, -50%) scale(2)';
-    myRef.current.style.transform = 'translate(-50%, -50%)';
+    myRef.current.style.transform = "translate(-50%, -50%)";
   }, []);
 
   const handleElementReSize = async (id, values) => {
-    console.log("Element resize")
+    console.log("Element resize");
     const newEditorState = {
       ...editorElements,
       elementMap: {
@@ -69,7 +69,7 @@ const MainCanvas = ({
       },
     };
     console.log(
-      '🚀 ~ file: index.js:59 ~ handleElementReSize ~ newEditorState',
+      "🚀 ~ file: index.js:59 ~ handleElementReSize ~ newEditorState",
       newEditorState
     );
     // await updateEditor(newEditorState);
@@ -77,36 +77,42 @@ const MainCanvas = ({
   };
 
   const debounceElementReSizeHandler = React.useCallback(
-    debounce(handleElementReSize,500),
+    debounce(handleElementReSize, 500),
     []
   );
 
   const editorBackGroundColor = editorElements.properties;
-  console.log("🚀 ~ file: index.js:85 ~ editorBackGroundColor", editorBackGroundColor)
+  console.log(
+    "🚀 ~ file: index.js:85 ~ editorBackGroundColor",
+    editorBackGroundColor
+  );
 
   const getEditorStyle = () => {
     let style = {
-      top: '50%',
-      left: '65%', // change this to 50% when it is in prod
-      width: '960px',
-      height: '540px',
-      border: '1px',
-      position: 'fixed',
-      overflow: 'hidden',
-    }
-    const editorProperties= editorElements.properties;
+      top: "50%",
+      left: "65%", // change this to 50% when it is in prod
+      width: "760px",
+      height: "540px",
+      border: "1px",
+      position: "fixed",
+      overflow: "hidden",
+    };
+    const editorProperties = editorElements.properties;
 
-    if(editorProperties.editorStyle === "color"){
-      style = {...style,backgroundColor:editorProperties.editorBackgroundColor}
+    if (editorProperties.editorStyle === "color") {
+      style = {
+        ...style,
+        backgroundColor: editorProperties.editorBackgroundColor,
+      };
     }
 
     return style;
-  }
+  };
   return (
     <div
       style={{
-        width: '100%',
-        height: '100%',
+        width: "100%",
+        height: "100%",
       }}
     >
       {/* rendering all the Editor elements */}
@@ -115,7 +121,7 @@ const MainCanvas = ({
         ref={myRef}
         onClick={(e) => {
           e.preventDefault();
-          console.log('OUT DIV CLICK');
+          console.log("OUT DIV CLICK");
           handleSelect({
             id: undefined,
             ref: undefined,
@@ -133,10 +139,15 @@ const MainCanvas = ({
               width: target.offsetWidth,
             });
           }}
-          onDragCallBack={(e)=>{
-            const parsedTransFormValue = parseComplexStyleProperty(e.target.style.transform)
-            const newTransLateValue = parsedTransFormValue && parsedTransFormValue.translate && parsedTransFormValue.translate[0].split(',')
-            if(newTransLateValue){
+          onDragCallBack={(e) => {
+            const parsedTransFormValue = parseComplexStyleProperty(
+              e.target.style.transform
+            );
+            const newTransLateValue =
+              parsedTransFormValue &&
+              parsedTransFormValue.translate &&
+              parsedTransFormValue.translate[0].split(",");
+            if (newTransLateValue) {
               const newXValue = parseFloat(newTransLateValue[0].trim());
               const newYValue = parseFloat(newTransLateValue[1].trim());
               handleElementReSize(activeElement.id, {
@@ -144,7 +155,7 @@ const MainCanvas = ({
                 y: newYValue,
               });
             }
-            onDragCallBack(e)
+            onDragCallBack(e);
           }}
           zoomState={zoomState}
         />

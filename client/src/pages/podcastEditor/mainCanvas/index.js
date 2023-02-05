@@ -89,7 +89,7 @@ const MainCanvas = ({
 
   const getEditorStyle = () => {
     let style = {
-      top: "50%",
+      top: "60%",
       left: "65%", // change this to 50% when it is in prod
       width: "760px",
       height: "540px",
@@ -109,12 +109,9 @@ const MainCanvas = ({
     return style;
   };
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-      }}
-    >
+    <div className="relative w-full h-full">
+      {/* <div class="w-full bg-black absolute h-20 left-[555px]"></div> */}
+
       {/* rendering all the Editor elements */}
       <div
         style={getEditorStyle()}

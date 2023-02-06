@@ -51,8 +51,9 @@ const ShapePanel = ({ addElementToCanvas }) => {
     useState(false);
   const [showGradientColor2Picker, setShowGradientColor2Picker] =
     useState(false);
+  const [gradientAngle, setGradientAngle] = useState(0);
   return (
-    <div className="text-white w-full px-11 py-[64px] ">
+    <div className="text-white w-full px-11 py-[33px] ">
       {shapeSelect && (
         <div className="absolute left-[555px]">
           {showSolidShapeColorPicker && (
@@ -282,6 +283,7 @@ const ShapePanel = ({ addElementToCanvas }) => {
                 <div
                   onClick={() => {
                     // change direction of gradient
+                    setGradientAngle(gradientAngle + 45);
                   }}
                   className="bg-brandBlue active:bg-blue-500 cursor-pointer px-[12px] text-white   py-[8px] rounded max-w-max"
                 >

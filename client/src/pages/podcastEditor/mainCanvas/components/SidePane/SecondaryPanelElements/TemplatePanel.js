@@ -6,11 +6,11 @@ const TemplatePanel = ({ addElementToCanvas }) => {
   const [first, setfirst] = useState();
   const [displayPrompt, setDisplayPrompt] = useState(true);
   return (
-    <div className="text-white w-full px-11 ">
+    <div className="text-white w-full px-11 py-[33px] ">
       {templates.map((template, index) => {
         return (
-          <div className="flex flex-col">
-            <div className="text-2xl font-sans mt-[64px]">{template.name}</div>
+          <div className="flex flex-col mb-[64px]">
+            <div className="text-2xl font-sans ">{template.name}</div>
             <div className="flex flex-row flex-wrap w-full justify-between">
               {template.templates.map((template, index) => {
                 return (

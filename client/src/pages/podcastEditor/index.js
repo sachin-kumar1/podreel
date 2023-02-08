@@ -24,6 +24,8 @@ const PodCastEditor = () => {
   let [disablePan, setDisablePan] = useState(false);
   const [curZoomState, setCurrentZoomState] = useState(1);
 
+  const [showToolBar, setShowToolBar] = useState(false);
+
   const [editorLoaded, setEditorLoaded] = useState(false);
 
   const [editorElements, setEditorElementState] = React.useState({
@@ -245,7 +247,7 @@ const PodCastEditor = () => {
           <SidePane addElementToCanvas={addElementToCanvas} />
         </Dock>
         {/* menu bar */}
-        <TextFormatBar />
+        <TextFormatBar show={showToolBar} />
         <div
           style={{ width: "100%", height: "100%", backgroundColor: "#F5F5F5" }}
         >

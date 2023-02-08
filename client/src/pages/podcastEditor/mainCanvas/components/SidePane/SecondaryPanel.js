@@ -2,9 +2,11 @@ import React from "react";
 import BackgroundPanel from "./SecondaryPanelElements/BackgroundPanel";
 import ElementsPanel from "./SecondaryPanelElements/ElementsPanel";
 import ImagePanel from "./SecondaryPanelElements/ImagePanel";
+// import ImageCrop from "./SecondaryPanelElements/ImageCrop";
 import ShapePanel from "./SecondaryPanelElements/ShapePanel";
 import TextPanel from "./SecondaryPanelElements/TextPanel";
 import TemplatePanel from "./SecondaryPanelElements/TemplatePanel";
+import TranscriptPanel from "./SecondaryPanelElements/TranscriptPanel";
 import { BsPaletteFill } from "react-icons/bs";
 
 const SecondaryPanel = ({ selectedPane, addElementToCanvas }) => {
@@ -25,6 +27,8 @@ const SecondaryPanel = ({ selectedPane, addElementToCanvas }) => {
         return BackgroundPanel;
       case "Photos":
         return ImagePanel;
+      case "Transcript":
+        return TranscriptPanel;
       default:
         return ElementsPanel;
     }

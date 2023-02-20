@@ -36,7 +36,8 @@ const SecondaryPanel = ({ selectedPane, addElementToCanvas }) => {
   const PanelToShow = getPannelToShow(selectedPane);
   return (
     <div
-      className=" overflow-auto secondary-panel"
+      id="secondary-panel"
+      className=" overflow-auto secondary-panel font-inter"
       style={{ width: "100%", height: "100%", backgroundColor: "#18191B" }}
     >
       <div className="mt-[75px] flex justify-center items-center">

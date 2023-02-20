@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import CircleShape from "../../Shapes/CircleShape";
-import SquareShape from "../../Shapes/SquareShape";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import { ToggleSwitchText, ColorPicker } from "../../Tools";
-// import { HexColorPicker } from "react-colorful";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 const shapes = [
   {

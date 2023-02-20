@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { HexColorPicker } from "react-colorful";
-import EyeDropper from "react-eyedropper";
+// import EyeDropper from "react-eyedropper";
 const ColorPicker = ({ className, color, setColor }) => {
-  const [eyedropper, setEyedropper] = useState("");
+  // const [eyedropper, setEyedropper] = useState("");
   const [colorHistory, setColorHistory] = useState([
     "#000000",
     "#fe5986",
@@ -39,6 +39,7 @@ const ColorPicker = ({ className, color, setColor }) => {
         </div>
         <div className="w-[52px] bg-pink-300 h-[42px] rounded-sm border-l-2 border-[#BDBDBD]">
           {/* eye dropper */}
+          {/* doesnt work */}
           {/* <EyeDropper initializedColor={eyedropper} /> */}
         </div>
       </div>

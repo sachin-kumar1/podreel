@@ -41,7 +41,7 @@ const TemplatePanel = ({ addElementToCanvas }) => {
       {/* dont like template prompt */}
       {displayPrompt && (
         <div class="chat-bb-temp bg-brandBlue rounded-2xl px-[20px] py-[23px] text-white absolute w-[400px] h-[200px] top-[150px]  left-[555px]">
-          <div class="text-2xl">
+          <div class="text-2xl font-bold">
             <BsPaletteFill className="inline-block mr-2" />
             Don't like the template?
           </div>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ToggleSwitchText, ColorPicker } from "../../Tools";
+import { ColorPicker } from "../../Tools";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -22,6 +22,12 @@ const BackgroundPanel = ({ addElementToCanvas }) => {
   const [gradientAngle, setGradientAngle] = useState(0);
   const [overlayColor, setOverlayColor] = useState("#962FBF");
   const [overlayOpacity, setOverlayOpacity] = useState(0);
+  const HideColorPicker = () => {
+    setShowGradientColor1Picker(false);
+    setShowGradientColor2Picker(false);
+    setShowOverlayColor(false);
+    setShowSolidShapeColorPicker(false);
+  };
   return (
     <div className="text-white w-full px-11 py-[33px] ">
       <div className="absolute left-[555px]">
@@ -61,6 +67,7 @@ const BackgroundPanel = ({ addElementToCanvas }) => {
             onClick={() => {
               setShowSolidShapeColorPicker(false);
               setEnableSolidColors(false);
+              HideColorPicker();
               setHome(true);
             }}
           >
@@ -79,6 +86,7 @@ const BackgroundPanel = ({ addElementToCanvas }) => {
               <div
                 onClick={() => {
                   setHome(true);
+                  HideColorPicker();
                   setEnableSolidColors(!enableSolidColors);
                 }}
                 className="w-11 h-6  bg-gray-200 rounded-full peer  peer-focus:ring-brandPurple  peer-checked:after:translate-x-full peer-checked:after:border-brandPurple  after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-brandPurple after:border-2 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brandPurple"
@@ -92,9 +100,6 @@ const BackgroundPanel = ({ addElementToCanvas }) => {
                 style={{ backgroundColor: solidShapeColor }}
                 onClick={() => {
                   setShowSolidShapeColorPicker(!showSolidShapeColorPicker);
-                  // setShowBorderColorPicker(false);
-                  // setShowGradientColor1Picker(false);
-                  // setShowGradientColor2Picker(false);
                 }}
               />
               <input
@@ -131,7 +136,7 @@ const BackgroundPanel = ({ addElementToCanvas }) => {
               <div
                 onClick={() => {
                   setHome(true);
-
+                  HideColorPicker();
                   setEnableGradientColors(!enableGradientColors);
                 }}
                 className="w-11 h-6  bg-gray-200 rounded-full peer  peer-focus:ring-brandPurple  peer-checked:after:translate-x-full peer-checked:after:border-brandPurple  after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-brandPurple after:border-2 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brandPurple"
@@ -149,7 +154,6 @@ const BackgroundPanel = ({ addElementToCanvas }) => {
               onClick={() => {
                 setShowGradientColor1Picker(!showGradientColor1Picker);
                 setShowGradientColor2Picker(false);
-
                 setShowSolidShapeColorPicker(false);
               }}
             />
@@ -218,7 +222,7 @@ const BackgroundPanel = ({ addElementToCanvas }) => {
               <div
                 onClick={() => {
                   setHome(true);
-
+                  HideColorPicker();
                   setEnableBackgroundImage(!enableBackgroundImage);
                 }}
                 className="w-11 h-6  bg-gray-200 rounded-full peer  peer-focus:ring-brandPurple  peer-checked:after:translate-x-full peer-checked:after:border-brandPurple  after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-brandPurple after:border-2 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brandPurple"

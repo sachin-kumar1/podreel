@@ -2,9 +2,11 @@ import React from "react";
 import BackgroundPanel from "./SecondaryPanelElements/BackgroundPanel";
 import ElementsPanel from "./SecondaryPanelElements/ElementsPanel";
 import ImagePanel from "./SecondaryPanelElements/ImagePanel";
+// import ImageCrop from "./SecondaryPanelElements/ImageCrop";
 import ShapePanel from "./SecondaryPanelElements/ShapePanel";
 import TextPanel from "./SecondaryPanelElements/TextPanel";
 import TemplatePanel from "./SecondaryPanelElements/TemplatePanel";
+import TranscriptPanel from "./SecondaryPanelElements/TranscriptPanel";
 import { BsPaletteFill } from "react-icons/bs";
 
 const SecondaryPanel = ({ selectedPane, addElementToCanvas }) => {
@@ -25,6 +27,8 @@ const SecondaryPanel = ({ selectedPane, addElementToCanvas }) => {
         return BackgroundPanel;
       case "Photos":
         return ImagePanel;
+      case "Transcript":
+        return TranscriptPanel;
       default:
         return ElementsPanel;
     }
@@ -32,7 +36,8 @@ const SecondaryPanel = ({ selectedPane, addElementToCanvas }) => {
   const PanelToShow = getPannelToShow(selectedPane);
   return (
     <div
-      className=" overflow-auto secondary-panel"
+      id="secondary-panel"
+      className=" overflow-auto secondary-panel font-inter"
       style={{ width: "100%", height: "100%", backgroundColor: "#18191B" }}
     >
       <div className="mt-[75px] flex justify-center items-center">

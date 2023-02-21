@@ -6,6 +6,7 @@ import axios from "axios";
 import _ from "lodash";
 import { debounce } from "../../common/helpers/utlis";
 import { updateEditor } from "./helpers/editor";
+import { TextFormatBar } from "./mainCanvas/components/Tools";
 import uuid from "react-uuid";
 import SidePane from "./mainCanvas/components/SidePane";
 import {
@@ -22,6 +23,8 @@ const PodCastEditor = () => {
   let panRef = useRef(null);
   let [disablePan, setDisablePan] = useState(false);
   const [curZoomState, setCurrentZoomState] = useState(1);
+
+  const [showToolBar, setShowToolBar] = useState(false);
 
   const [editorLoaded, setEditorLoaded] = useState(false);
 
@@ -233,7 +236,7 @@ const PodCastEditor = () => {
   return (
     <div style={{ width: "100%", height: "100%", overflow: "hidden" }}>
       <MainTopBar />
-      <div style={{ width: "100%", height: "100%" }}>
+      <div className="flex w-full h-full">
         <Dock
           size={550}
           position="left"
@@ -243,6 +246,8 @@ const PodCastEditor = () => {
         >
           <SidePane addElementToCanvas={addElementToCanvas} />
         </Dock>
+        {/* menu bar */}
+        <TextFormatBar show={showToolBar} />
         <div
           style={{ width: "100%", height: "100%", backgroundColor: "#F5F5F5" }}
         >
